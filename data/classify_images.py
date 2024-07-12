@@ -65,11 +65,31 @@ def classify_images(images_dir, results_dic, model):
      Returns:
            None - results_dic is mutable data type so no return needed.         
     """
+   def classify_images(images_dir, results_dic, model):
+    """
+    Classify pet images using a CNN model and compare with pet labels.
+
+    Args:
+        images_dir (str): The path to the folder of images to be classified.
+        results_dic (dict): A dictionary with image filenames as keys and lists as values.
+        model (str): The CNN model architecture to use for classification.
+
+    Returns:
+        None
+    """
     for key in results_dic:
-      model_label = classifier(images_dir+key, model)
-      model_label = model_label.lower().strip()
-      truth=results_dic[key][0]
-      if truth in model_label:
-        results_dic[key].extend([model_label,1])
-      else:
-        results_dic[key].extend([model_label,0])
+        if images_dir:
+            classified_image = classifier(f"{images_dir}/{key}", model)
+        else:
+            print("Error: images_dir is None")
+            classified_image = ""
+
+        classified_image = classified_image.lower().strip()
+
+        pet_label = results_dic[key][0]
+        if pet_label in classified_image:
+            results_dic[key].extend([classified_image, 1])
+        else:
+            results_dic[key].extend([classified_image, 0])
+
+    print(results_dic)
