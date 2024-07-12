@@ -40,33 +40,27 @@ def get_pet_labels(image_dir):
       List. The list contains for following item:
          index 0 = pet image label (string)
     """
-    # Replace None with the results_dic dictionary that you created with this
-    # function
-    filenames = listdir(image_dir)
+   def get_pet_labels(image_dir: str) -> dict:
+    """
+    Creates a dictionary of pet labels based on the filenames of the image files.
 
-    # creating an empty dictionary
-    results_dic = dict()
+    Parameters:
+    image_dir (str): The full path to the folder of images to be classified.
 
-    # pre-processing the filenames extracted
-    for filename in filenames:
-      
-      # pet label placeholder
-      pet_label = ""
+    Returns:
+    dict: A dictionary with the image filename as the key and a list containing
+          the pet image label as the value.
+    """
+    filename_list = os.listdir(image_dir)
+    results_dic = {}
 
-      # split on '.' first, then take the first element from the returned list
-      filename_split_list = filename.split(".")
-      filename_without_ext_list = filename_split_list[0].split("_")
+    for filename in filename_list:
+        if not filename.startswith('.'):
+            pet_name = ' '.join(word for word in filename.lower().split('_') if word.isalpha()).strip()
+            results_dic[filename] = [pet_name]
 
-      # iterating on the list items
-      for word in filename_without_ext_list:
-        if word.isalpha():
-          pet_label += " " + word.lower()
+    print("\nPrinting all key-value pairs in dictionary results_dic:")
+    for key, value in results_dic.items():
+        print(f"filename = {key}, pet label = {value[0]}")
 
-      # removing the whitespace
-      pet_label = pet_label.strip()
-
-      # populating the created dictionary
-      results_dic[filename] = [pet_label]
-
-    # return the dictionary
     return results_dic
